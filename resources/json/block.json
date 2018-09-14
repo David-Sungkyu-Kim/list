@@ -1,0 +1,24 @@
+{
+  "blockList": [
+    {
+      "uId": "User00",
+      "txAmount": "14530",
+      "dateTime": "180323 09:31:21"
+    },
+    {
+      "uId": "User01",
+      "txAmount": "14530",
+      "dateTime": "180323 09:31:21"
+    },
+    {
+      "uId": "User02",
+      "txAmount": "14530",
+      "dateTime": "180323 09:31:21"
+    },
+    {
+      "uId": "User03",
+      "txAmount": "14530",
+      "dateTime": "180323 09:31:21"
+    }
+  ]
+}

@@ -1,0 +1,312 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Toy project</title>
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
+        integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+  <link rel="stylesheet" href="../resources/css/style.css">
+</head>
+<body>
+
+<div class="wrapper clearfix">
+
+  <!-- wrap_contents -->
+  <div class="wrap_contents">
+
+    <div class="area_left _leftNavi">
+      <ul>
+        <li class="active"><a href="#">1</a></li>
+        <li><a href="#">2</a></li>
+        <li><a href="#">3</a></li>
+      </ul>
+    </div>
+
+    <div class="area_title">
+      <h1>List <i class="fas fa-archive"></i></h1>
+      <span>- Stats List</span>
+    </div>
+
+    <div class="area_contents">
+
+      <div class="row">
+        <div class="col">
+          <div class="row card_section section_contents section_block">
+            <div class="col-3">
+              <div class="area_block_list">
+                <div class="title_sub">List A</div>
+                <div class="scroll">
+                  <ul id="blockList" class="box_block_list">
+
+                  </ul>
+                </div>
+
+              </div>
+
+            </div>
+
+            <div class="col-9">
+              <div class="title_sub">List Contents</div>
+              <div class="area_transaction_list scroll">
+                <ul id="transactionList">
+
+                </ul>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+  <!-- // wrap_contents -->
+
+  <!-- wrap_footer -->
+  <div class="wrap_footer">
+    footer
+  </div>
+  <!-- // wrap_footer -->
+
+</div>
+<script src="../resources/js/ui.common.js"></script>
+<script src="../resources/js/ui.init.js"></script>
+<script>
+
+  /**
+   * 1. blockList render
+   * 2. txList render
+   * 3.
+   */
+  document.addEventListener("DOMContentLoaded", function () {
+    sendBlockAjax('../resources/json/block.json');
+    sendTxAjax("../resources/json/tx.json", 0);
+    indexInClass(document.querySelectorAll('.box_block_list li'));
+  });
+
+  document.addEventListener('click', function (event) {
+    /**
+     * document에 click event bind (event delegation)
+     * 클릭한 이벤트 타겟의 부모를 체크 후 blockList에만 동작.
+     * @param element : 객체
+     * @param selector : 객체의 부모 엘리먼트
+     */
+    var getParents = function (elem, selector) {
+      if (!Element.prototype.matches) {
+        Element.prototype.matches =
+          Element.prototype.matchesSelector ||
+          Element.prototype.mozMatchesSelector ||
+          Element.prototype.msMatchesSelector ||
+          Element.prototype.oMatchesSelector ||
+          Element.prototype.webkitMatchesSelector ||
+          function (s) {
+            var matches = (this.document || this.ownerDocument).querySelectorAll(s),
+              i = matches.length;
+            while (--i >= 0 && matches.item(i) !== this) {
+            }
+            return i > -1;
+          };
+      }
+
+      var parents = [];
+      for (; elem && elem !== document; elem = elem.parentNode) {
+        if (selector) {
+          if (elem.matches(selector)) {
+            parents.push(elem);
+          }
+          continue;
+        }
+        parents.push(elem);
+      }
+      return parents;
+    };
+
+
+    var parents = getParents(event.target, '.box_block_list');
+    if (parents.length > 0) {
+      if (parents[0].classList.value === 'box_block_list') {
+        document.getElementById("transactionList").innerHTML = '';
+        indexInClass(document.querySelectorAll('.box_block_list li'));
+      }
+    }
+
+  });
+
+
+  /**
+   * blockList li.active의 index를 return하고 txList url 보냄
+   * @param element
+   */
+  function indexInClass(element) {
+    element.forEach(function (array, index) {
+      //element의 className
+      var className = array.className;
+      var nActiveIndex = 0;
+      //todo break
+      for (var i = 0; i < element.length; i++) {
+        //active된 li의 index를 data[index]를 위해 넘기고 리턴
+
+        if (element[i] === array) {
+          if (className === 'active') {
+            //txList request
+            sendTxAjax("../resources/json/tx.json", nActiveIndex);
+            return nActiveIndex;
+          }
+        }
+        nActiveIndex++;
+      }
+      return -1;
+
+    });
+  }
+
+  /**
+   * txList 템플릿 함수
+   * @param data : json data
+   * @param index : active된 blockList li의 index
+   */
+  function makeTxList(data, index) {
+    var html = document.getElementById("txListTemplate").innerHTML;
+    var resultHTML = '';
+
+    for (var i = 0; i < data.txList.length; i++) {
+      var aResultHtml1 = data.txList[index];
+      break;
+    }
+
+    aResultHtml1.forEach(function (array, i) {
+      resultHTML = html
+        .replace("{user}", array.user)
+        .replace("{txAmount}", array.txAmount)
+        .replace("{txTo}", array.txTo)
+        .replace("{dateTime}", array.dateTime);
+
+      document.getElementById("transactionList").innerHTML += resultHTML;
+    });
+
+  }
+
+  /**
+   * blockList 템플릿 함수
+   * @param data : json data
+   */
+  function makeBlockList(data) {
+    var html = document.getElementById("blockListTemplate").innerHTML;
+    var resultHTML = '';
+
+    data.blockList.forEach(function (array, index) {
+      resultHTML = html
+        .replace("{uId}", data.blockList[index].uId)
+        .replace("{txAmount}", data.blockList[index].txAmount)
+        .replace("{dateTime}", data.blockList[index].dateTime);
+
+      document.getElementById("blockList").innerHTML += resultHTML;
+    });
+
+  }
+
+  /**
+   * blockList request
+   * @param url
+   */
+  function sendBlockAjax(url) {
+    var oReq = new XMLHttpRequest();
+    oReq.open("GET", url);
+    oReq.send();
+
+    oReq.onreadystatechange = function (e) {
+      if (oReq.readyState === XMLHttpRequest.DONE) {
+        if (oReq.status === 200) {
+          var data = JSON.parse(oReq.responseText);
+          makeBlockList(data);
+          document.querySelectorAll('.area_block_list li')[0].classList.add('active');
+        }
+      }
+    };
+
+  }
+
+  /**
+   * txList request
+   * @param url
+   * @param clickedIndex
+   */
+  function sendTxAjax(url, clickedIndex) {
+    var oReq = new XMLHttpRequest();
+    oReq.open("GET", url);
+    oReq.send();
+
+    oReq.onreadystatechange = function (e) {
+      if (oReq.readyState === XMLHttpRequest.DONE) {
+        if (oReq.status === 200) {
+          var data = JSON.parse(oReq.responseText);
+          makeTxList(data, clickedIndex);
+        }
+      }
+    };
+
+  }
+
+</script>
+
+<script id="blockListTemplate" type="x-template">
+  <li>
+    <a href="#">
+      <i class="fas fa-archive"></i>
+      <i class="fas fa-box-open"></i>
+      <div>
+        <table>
+          <tr>
+            <th>ID :</th>
+            <td>{uId}</td>
+          </tr>
+          <tr>
+            <th>Amount :</th>
+            <td>{txAmount}</td>
+          </tr>
+          <tr>
+            <th>create date :</th>
+            <td>{dateTime}</td>
+          </tr>
+        </table>
+      </div>
+    </a>
+  </li>
+</script>
+
+<script id="txListTemplate" type="x-template">
+  <li class="col-lg-6">
+    <table class="table table-bordered table-striped">
+      <colgroup>
+        <col style="width: 30%;">
+      </colgroup>
+      <tbody>
+      <tr>
+        <th>User</th>
+        <td>{user}</td>
+      </tr>
+      <tr>
+        <th>Amount</th>
+        <td>{txAmount}</td>
+      </tr>
+      <tr>
+        <th>Tx to</th>
+        <td>{txTo}</td>
+      </tr>
+      <tr>
+        <th>DateTime</th>
+        <td>{dateTime}</td>
+      </tr>
+      </tbody>
+    </table>
+  </li>
+</script>
+
+</body>
+</html>
+
+

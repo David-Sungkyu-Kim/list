@@ -1,0 +1,100 @@
+@charset "UTF-8";
+
+/**
+ * page css
+ * 작성자 : 김성규
+ */
+.area_contents .section_contents .scroll {
+  overflow-y: auto;
+}
+.area_contents .section_contents.section_block .scroll {
+  height: 95%;
+  border: #eee 1px solid;
+}
+.area_contents .section_contents.section_transaction .scroll {
+  height: 115px;
+}
+.area_block_list,
+.area_transaction_list {
+  /*width: 175%;*/
+}
+.area_block_list ul {
+  margin: 10px;
+}
+.area_block_list ul li {
+  position: relative;
+  height: 84px;
+  font-size: 4rem;
+  color: rgba(0,0,0,0.35);
+  text-align: center;
+  padding: 15px 5px 0 60px;
+  border-bottom: #eee 1px solid;
+  border-radius: 3px;
+  cursor:pointer;
+}
+.area_block_list ul li:first-child {
+  /*border-left: 0;*/
+}
+.area_block_list ul li i {
+  display: block;
+  position: absolute;
+  top:15px;
+  left: 10px;
+  color: rgba(54,79,106,0.25);
+}
+.area_block_list ul .fa-box-open,
+.area_block_list ul .active .fa-box-open{
+  font-size: 3.5rem;
+}
+.area_block_list ul .active {
+  background: rgba(54,79,106,0.25);
+}
+.area_block_list ul .active i {
+  color: #364f6a;
+}
+.area_block_list ul .fa-box-open,
+.area_block_list ul .active .fa-archive {
+  display: none;
+}
+.area_block_list ul .fa-archive,
+.area_block_list ul .active .fa-box-open {
+  display: inline-block;
+}
+
+.area_block_list ul li table th {
+  width: 70px;
+}
+.area_block_list ul li table th,
+.area_block_list ul li table td {
+  font-size: 1.2rem;
+}
+.area_transaction_list.scroll {
+  padding: 10px;
+}
+.area_transaction_list ul li {
+  /*float: left;*/
+  /*width: 50%;*/
+  font-size: 1.2rem;
+  padding: 0 5px 5px 0;
+}
+.area_transaction_list ul li>div {
+  padding: 3px;
+  /*background: rgba(169,169,164,0.35);*/
+  border: #ddd 1px solid;
+  border-radius: 3px;
+}
+.area_block_list ul li table {
+  width: 100%;
+}
+.area_block_list ul li table td,
+.area_transaction_list ul li table th {
+  font-size: 1.3rem;
+  font-weight: normal;
+}
+.area_transaction_list ul li td {
+  font-size: 1.4rem;
+  word-break: break-all;
+}
+.area_transaction_list .col-lg-6 {
+  margin-bottom: 0;
+}
