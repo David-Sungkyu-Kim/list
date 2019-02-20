@@ -82,7 +82,7 @@ gb.view.global.prototype = {
           }
         }
 
-      }.bind(this));
+      });
     }
   },
   indexInClass: function(element) {
