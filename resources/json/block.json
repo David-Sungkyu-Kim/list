@@ -23,6 +23,18 @@
             ],
             "datetime": "2018-12-05 10:25:03.877",
             "tx_id": "efd13e3585402874a30f446a3f7b6406e789957aa697413182b95c673a3d654e"
+          },
+          {
+            "args": [
+              "createUser",
+              "hkang",
+              "hkang@graphblockchain.com",
+              "Org1",
+              "2018-12-05 10:25:03.864",
+              "5"
+            ],
+            "datetime": "2018-12-05 10:25:03.877",
+            "tx_id": "=9957aa697413182b95c673a3d654e"
           }
         ]
       },
@@ -521,16 +533,16 @@
     "chname": "gbc02",
     "blks": [
       {
-        "channelName": "gbc01",
-        "blockId": 493,
-        "dataHash": "110bdd703b4fd4b6d035dbe2fa42b85e1a0b7ea596fcbbaa77b64eff52ac6785",
+        "channelName": "gbc02",
+        "blockId": 200,
+        "dataHash": "46cc8b18180cb43007d3c352a5e4f2284fd45551e4de417934e12c9195fc1466",
         "prevHash": "77362314cbafc201487ef6e67b851ba1aba97a0184ed2eaa7438c1db1b414966",
         "tx_count": 1,
         "env_count": 0,
         "detail": [
           {
             "args": [
-              "createUser",
+              "gbc02",
               "hkang",
               "e4f1eda63c6c45015a765f566fedce735d481f48f660de37db0abd3fc1efcabf",
               "hkang@graphblockchain.com",
@@ -545,16 +557,16 @@
         ]
       },
       {
-        "channelName": "gbc01",
-        "blockId": 492,
+        "channelName": "gbc02",
+        "blockId": 201,
         "dataHash": "b542bc365b8860aec10d46c73f0e4edfaed404f031a4b40c8fe901623be7e618",
-        "prevHash": "46cc8b18180cb43007d3c352a5e4f2284fd45551e4de417934e12c9195fc1466",
+        "prevHash": "110bdd703b4fd4b6d035dbe2fa42b85e1a0b7ea596fcbbaa77b64eff52ac6785",
         "tx_count": 1,
         "env_count": 0,
         "detail": [
           {
             "args": [
-              "updateDoc",
+              "gbc02updateDoc",
               "skim_doc3-6",
               "hson-0",
               "<span style=\"font-size: 11pt; color: rgb(34, 34, 34);-en-clipboard:true;\">대칭키 암호 시스템의 가장 큰 약점은 키관리의 어려움에 있다. 한 사용자가 관리해야 할 키의 수가 너무 많아지기 때문이다.&nbsp;</span><div><span style=\"font-size: 11pt; color: rgb(34, 34, 34);-en-clipboard:true;\">이러한 약점을 보완하기 위해 나타난 암호 시스템이 공개키 암호 시스템이다. 공개키 암호 시스템에서 각 사용자는 두 개의 키를 부여 받는다. 그 하나는 공개되고(공개키, public key), 다른 하나는 사용자에 의해 비밀리에 관리 되어야 한다.(비밀키, private key) 공개키 암호 시스템에서 각 사용자는 자신의 비밀키만 관리하면 되므로 키 관리의 어려움을 줄일 수 있다.&nbsp;</span></div><div><span style=\"color: rgb(34, 34, 34); font-size: 11pt;-en-clipboard:true;\">초기의 암호는 메시지 보안에 초점이 맞추어져 군사 또는 외교적 목적으로 사용되었지만, 현재는 메시지 보안이외에도 인증, 서명 등을 암호의 범주에 포함시켜 우리의 일상에서 떼 놓을 수 없는 중요한 분야가 되었다. 현금지급기의 사용, 컴퓨터의 패스워드, 전자상거래 등은 모두 현대적 의미의 암호에 의해 안정성을 보장받고 있다.</span>\r\n\r\n</div><div>엘리스(Alice)가 밥(Bob)에게 암호문을 보내고 복호화하는 가장 기본적인 과정을 기술한다. 두 사용자에게는 각각 공개키와 비밀키가 부여되었고, 이들의 공개키는 공개키 디렉터리에 저장되어 있다. 엘리스는 공개키 디렉터리에서 밥의 공개키를 찾아 이를 이용하여 문서를 암호화하여 밥에게 보낸다. 밥은 수신한 비밀 문서를 자신만이 알고 있는 자신의 비밀키로 복호화하여 엘리스가 보낸 문서의 내용을 알 수 있다. 공개키 만으로는 복호화가 불가능하기 때문에, 엘리스 역시 암호화 하고 나서 복원할 수 없다는 특징이 있다.\r\n\r\n</div><div><span style=\"color: rgb(34, 34, 34); font-family: sans-serif; font-size: 14px;\">Public key cryptography finds application in, among others, the&nbsp;</span><a href=\"https://en.wikipedia.org/wiki/Information_technology\" title=\"Information technology\" style=\"color: rgb(11, 0, 128); background: none rgb(255, 255, 255); font-family: sans-serif; font-size: 14px;\">information technology</a><span style=\"color: rgb(34, 34, 34); font-family: sans-serif; font-size: 14px;\">&nbsp;security discipline,&nbsp;</span><a href=\"https://en.wikipedia.org/wiki/Information_security\" title=\"Information security\" style=\"color: rgb(11, 0, 128); background: none rgb(255, 255, 255); font-family: sans-serif; font-size: 14px;\">information security</a><span style=\"color: rgb(34, 34, 34); font-family: sans-serif; font-size: 14px;\">. Information security (IS) is concerned with all aspects of protecting electronic information assets against security threats.</span><sup id=\"cite_ref-6\" class=\"reference\" style=\"line-height: 1; unicode-bidi: isolate; white-space: nowrap; font-size: 11.2px; color: rgb(34, 34, 34); font-family: sans-serif;\"><a href=\"https://en.wikipedia.org/wiki/Public-key_cryptography#cite_note-6\" style=\"color: rgb(11, 0, 128); background-image: none; background-position: initial; background-size: initial; background-repeat: initial; background-attachment: initial; background-origin: initial; background-clip: initial;\">[6]</a></sup><span style=\"color: rgb(34, 34, 34); font-family: sans-serif; font-size: 14px;\">&nbsp;Public key cryptography is used as a method of assuring the confidentiality, authenticity and&nbsp;</span><a href=\"https://en.wikipedia.org/wiki/Non-repudiation\" title=\"Non-repudiation\" style=\"color: rgb(11, 0, 128); background: none rgb(255, 255, 255); font-family: sans-serif; font-size: 14px;\">non-repudiability</a><span style=\"color: rgb(34, 34, 34); font-family: sans-serif; font-size: 14px;\">&nbsp;of electronic communications and data storage.</span></div><div><br></div>",
