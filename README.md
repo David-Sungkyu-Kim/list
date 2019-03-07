@@ -1,7 +1,6 @@
 # BlockList refactory
 
-> Only html, css, js
-> No js libraries, js frameworks
+> Vanilla js
 
 ## Build Setup
 
