@@ -1,27 +1,37 @@
 class List {
   constructor() {
-    // 초기 세팅
     this.setVars();
     this.registerEvents();
     this.init();
   }
 
-  // 변수 설정
   setVars() {
     this.originData = null;
     this.channelIndex = null;
+    this.bFirst = null;
+    this.nSliceIndex = 0;
     this.channelContainer = document.getElementById("channelList");
     this.blockContainer = document.getElementById("blockList");
     this.txContainer = document.querySelector("#transactionList ul");
-
+    this.elLoader = document.querySelector('._loader');
+    this.btnMoreLocation = document.querySelector(".area_block_list .scroll");
+    this.btnMore = document.createElement('p');
+    this.btnMore.style.display = 'none';
+    this.btnMoreText = document.createTextNode('more');
+    this.btnMore.appendChild(this.btnMoreText);
+    this.btnMore.classList.add('btn', 'btn-outline-orange', 'btn-sm', 'btn_more');
+    this.btnMoreLocation.appendChild(this.btnMore);
   }
 
-  // 이벤트 핸들러 등록
   registerEvents() {
     this.channelContainer.addEventListener('click', ({target}) => {
       const targetTagName = target.tagName;
       if (targetTagName !== 'LI' && targetTagName !== 'A') return;
+    });
 
+    this.btnMore.addEventListener('click', () => {
+      this.nSliceIndex += 11;
+      this.addList();
     });
   }
 
@@ -43,11 +53,13 @@ class List {
     }).then(function (responseData) {
       // console.log(responseData);
       // console.log('loading end...');
-      document.querySelector('._loader').style.display = 'none';
+      this.elLoader.style.display = 'none';
       this.originData = responseData;
+      this.bFirst = true;
       this.channelList(this.originData, 0);
       this.blockInfo(this.originData[0].blks, 0);
-    }.bind(this)).catch(function (error) {  //todo bind this edwith 설명 찾아보기
+
+    }.bind(this)).catch(function (error) {
       console.error(error);
     });
   }
@@ -56,51 +68,84 @@ class List {
     this.getData();
   }
 
-  channelList(data, index) { //todo 배열이 아닌 집합을 배열로 만들어주는 es6
-    this.channelIndex = index;
-    data.forEach((v) => {
-      this.channelContainer.innerHTML += `<li><a href="#">${v.chname}</a></li>`;
+  channelList(data, index) {
+    const tmpl = data => this.tmplHtml`
+      ${data.map(v => this.tmplHtml`<li><a href="#">${v.chname}</a></li>`)}
+    `;
+
+    const promise = new Promise(resolve =>{
+      for (let i = 0; i < data.length; i++) {
+        if (data[i].chname === '' && data[i].chname !== undefined) {
+          resolve(false);
+        } else {
+          resolve(true);
+        }
+      }
     });
 
-    this.blockList(data, index);
-    let el = document.querySelectorAll('#channelList li');
-    this.setActive(el, this.channelIndex);
+    promise.then(result => {
+      this.channelContainer.innerHTML = '';
+
+      if (result === false) {
+        this.channelContainer.insertAdjacentHTML('beforeend', this.emptyList());
+        this.channelIndex = 0;
+      } else {
+        this.channelContainer.insertAdjacentHTML('beforeend', tmpl(data));
+        this.channelIndex = index;
+        const el = document.querySelectorAll('#channelList li');
+        this.setActive(el);
+      }
+      this.blockList(data, this.channelIndex);
+    });
+
   }
 
-  blockList(data, index) {
-    this.blockContainer.innerHTML = '';
-    data[index].blks.forEach((v) => {
-      this.blockContainer.innerHTML +=
-        `<li>
+  blockList(data, index, boolean) {
+    const tmpl = insertData => this.tmplHtml`
+        ${insertData.map(v => this.tmplHtml`
+          <li>
           <a href="#"><i class="far fa-folder"></i><i class="far fa-folder-open"></i>
-          <div>
-            <table>
-              <tbody>
-              <tr>
-                <th>block ID :</th> 
-                <td>${v['blockId']}</td>
-              </tr>
-              <tr>
-                <th>Tx amount :</th>
-                <td>${v['tx_count']}</td>
-              </tr>
-              </tbody>
-            </table>
-          <div>
-          </a>
-        </li>`;
-    });
+            <div>
+              <table>
+                <tbody>
+                <tr>
+                  <th>block ID :</th>
+                  <td>$${v.blockId}</td>
+                </tr>
+                <tr>
+                  <th>Tx amount :</th>
+                  <td>$${v.tx_count}</td>
+                </tr>
+                </tbody>
+              </table>
+            <div>
+            </a>
+          </li>`)}`;
 
-    let el = document.querySelectorAll('#blockList li');
-    this.setActive(el, this.channelIndex);
+    let insertData = data[index].blks.slice(this.nSliceIndex, this.nSliceIndex + 11);
 
+    if (data[index].blks.length > 0 && insertData.length <= 12 + index) {
+      if (boolean !== true || !boolean) this.blockContainer.innerHTML = '';
+
+      if (insertData.length >= 11) {
+        this.showBtnMore();
+      } else {
+        this.hideBtnMore();
+        this.nSliceIndex = 0;
+      }
+      this.blockContainer.insertAdjacentHTML('beforeend', tmpl(insertData));
+      const el = document.querySelectorAll('#blockList li');
+      this.setActive(el);
+    } else {
+      //empty data
+      this.blockContainer.insertAdjacentHTML('beforeend', this.emptyList());
+    }
   }
 
   blockInfo(data, blockIndex) {
-    this.txContainer.innerHTML = '';
-    data[blockIndex].detail.forEach((v) => {
-      this.txContainer.innerHTML += `
-        <li>
+    const tmpl = insertData => this.tmplHtml`
+        ${insertData[blockIndex].detail.map(v => this.tmplHtml`
+          <li>
           <table class="table table-bordered table-striped">
             <colgroup>
               <col style="width: 30%;">
@@ -124,32 +169,45 @@ class List {
             </tr>
             </tbody>
           </table>
-        </li>`;
-    });
+          </li>`)}`;
 
+    this.txContainer.innerHTML = '';
+    if (data.length > 0) {
+      this.txContainer.insertAdjacentHTML('beforeend', tmpl(data));
+    } else {
+      // empty data
+      this.txContainer.insertAdjacentHTML('beforeend', this.emptyList());
+    }
   }
 
-  setActive(elements, channelIndex) {
+  setActive(elements) {
     const el = Array.from(elements);
-    // elements[0].setAttribute('class', 'active');
 
-    //todo loop 추상화
+    if (this.bFirst === true && el[0].parentNode.className === 'box_channel_list') {
+      el[0].setAttribute('class', 'active');
+    } else {
+      if (this.bFirst === true) {
+        el[0].setAttribute('class', 'active');
+      }
+      this.bFirst = false;
+    }
+
     const elementClick = (index) => {
-      elements[0].setAttribute('class', 'active');
-      el[index].onclick = () => {
-        if (el[index].getAttribute('class') !== 'active') {
-          for(let i = 0; i < el.length; i++){
-            el[i].removeAttribute('class');
-          }
-          el[index].setAttribute('class', 'active');
-        } else {
-          return;
+      el[index].addEventListener('click', () => {
+        for (let i = 0; i < el.length; i++) {
+          el[i].removeAttribute('class');
         }
 
+        if (el[index].getAttribute('class') !== 'active') {
+          el[index].setAttribute('class', 'active');
+        } else return;
+
         const className = el[index].parentNode.className;
-        switch(className) {
+        switch (className) {
           case 'box_channel_list':
+            this.bFirst = true;
             this.channelIndex = index;
+            this.nSliceIndex = 0;
             this.blockList(this.originData, index);
             this.blockInfo(this.originData[index].blks, 0);
             break;
@@ -158,17 +216,66 @@ class List {
             break;
           default:
             break;
-
         }
-      }
+      });
     };
 
-    for(let i = 0; i < el.length; i++){
+    for (let i = 0; i < el.length; i++) {
       elementClick(i);
     }
+  }
 
+  addList() {
+    const bAdd = true;
+    this.blockList(this.originData, this.channelIndex, bAdd);
+  }
+
+  tmplHtml(templateObject, ...substs) {
+    const raw = templateObject.raw;
+    let result = '';
+    substs.forEach((subst, i) => {
+      let lit = raw[i];
+      if (Array.isArray(subst)) {
+        subst = subst.join('');
+      }
+
+      if (lit.endsWith('$')) {
+        if (typeof subst === 'string') subst = this.htmlEscape(subst);
+        lit = lit.slice(0, -1);
+      }
+      result += lit;
+      result += subst;
+    });
+    result += raw[raw.length - 1];
+    return result;
+  }
+
+  htmlEscape(str) {
+    return str.replace(/&/g, '&amp;')
+      .replace(/>/g, '&gt;')
+      .replace(/</g, '&lt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;')
+      .replace(/`/g, '&#96;');
+  }
+
+  emptyList(){
+    return `<li class="txt_no_data">
+              <p>No data available</p>
+              <span class="fas fa-database"></span>
+            </li>`;
+  }
+
+  showBtnMore() {
+    this.btnMore.style.display = 'block';
+  }
+
+  hideBtnMore() {
+    this.btnMore.style.display = 'none';
   }
 
 }
 
 export default List;
+
+const myList = new List();

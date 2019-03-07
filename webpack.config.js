@@ -2,9 +2,9 @@ var path = require('path');
 
 module.exports = {
   mode: 'development',
-  entry: './views_html/index.js',
+  entry: './views_html/list.js',
   output: {
-    filename: 'bundle.js',
+    filename: 'ui.list.js',
     path: path.resolve(__dirname, 'dist'),
     publicPath: '/dist'
   },
