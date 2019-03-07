@@ -1,4 +1,4 @@
-# BlockList refactory project
+# BlockList refactory
 
 > Only html, css, js
 > No js libraries, js frameworks
