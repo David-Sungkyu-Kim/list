@@ -1,4 +1,4 @@
-# A small project
+# BlockList refactory project
 
 > Only html, css, js
 > No js libraries, js frameworks
