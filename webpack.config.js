@@ -2,7 +2,7 @@ var path = require('path');
 
 module.exports = {
   mode: 'development',
-  entry: './views_html/list.js',
+  entry: './views_html/list/list.js',
   output: {
     filename: 'ui.list.js',
     path: path.resolve(__dirname, 'dist'),

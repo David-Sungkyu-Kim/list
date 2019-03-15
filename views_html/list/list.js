@@ -37,7 +37,7 @@ class List {
 
   // fetch
   getData() {
-    const url = "../resources/json/block.json";
+    const url = "../../resources/json/block.json";
     // const url = '${pageContext.request.contextPath}/json/block_graph.gbj';
 
     fetch(url).then(function (response) {
