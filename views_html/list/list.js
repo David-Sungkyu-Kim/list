@@ -276,6 +276,6 @@ class List {
 
 }
 
-export default List;
+module.exports = List;
 
 const myList = new List();
