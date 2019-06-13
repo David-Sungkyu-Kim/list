@@ -109,7 +109,7 @@ class List {
               <table>
                 <tbody>
                 <tr>
-                  <th>block ID :</th>
+                  <th>ID :</th>
                   <td>$${v.blockId}</td>
                 </tr>
                 <tr>
