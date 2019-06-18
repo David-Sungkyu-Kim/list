@@ -36,41 +36,40 @@ class List {
   }
 
   // fetch
-  getData() {
-    const url = "../../resources/json/block.json";
+  async getData() {
+    const url = "../../resources/json/data.json";
     // const url = '${pageContext.request.contextPath}/json/block_graph.gbj';
 
-    fetch(url).then(function (response) {
-      // console.log('loading start...');
+    const response = await fetch(url);
+
+    try {
       if (response.ok) {
-        return response.json();
+        const responseData = await response.json();
+
+        this.elLoader.style.display = 'none';
+        this.originData = responseData;
+        this.bFirst = true;
+        this.makeChannelList(this.originData, 0);
+        this.showIdInfo(this.originData[0].blks, 0);
       } else {
-        return Promise.reject({
+        return console.error({
           status: response.status,
           statusText: response.statusText
         });
       }
-    }).then(function (responseData) {
-      // console.log(responseData);
-      // console.log('loading end...');
-      this.elLoader.style.display = 'none';
-      this.originData = responseData;
-      this.bFirst = true;
-      this.channelList(this.originData, 0);
-      this.blockInfo(this.originData[0].blks, 0);
+    } catch(err) {
+      console.log(err);
+    }
 
-    }.bind(this)).catch(function (error) {
-      console.error(error);
-    });
   }
 
   init() {
     this.getData();
   }
 
-  channelList(data, index) {
-    const tmpl = data => this.tmplHtml`
-      ${data.map(v => this.tmplHtml`<li><a href="#">${v.chname}</a></li>`)}
+  makeChannelList(data, index) {
+    const makeChannelTemplete = data => this.templeteHtml`
+      ${data.map(v => this.templeteHtml`<li><a href="#">${v.chname}</a></li>`)}
     `;
 
     const promise = new Promise(resolve =>{
@@ -87,22 +86,22 @@ class List {
       this.channelContainer.innerHTML = '';
 
       if (result === false) {
-        this.channelContainer.insertAdjacentHTML('beforeend', this.emptyList());
+        this.channelContainer.insertAdjacentHTML('beforeend', List.emptyList());
         this.channelIndex = 0;
       } else {
-        this.channelContainer.insertAdjacentHTML('beforeend', tmpl(data));
+        this.channelContainer.insertAdjacentHTML('beforeend', makeChannelTemplete(data));
         this.channelIndex = index;
         const el = document.querySelectorAll('#channelList li');
         this.setActive(el);
       }
-      this.blockList(data, this.channelIndex);
+      this.makeIdList(data, this.channelIndex);
     });
 
   }
 
-  blockList(data, index, boolean) {
-    const tmpl = insertData => this.tmplHtml`
-        ${insertData.map(v => this.tmplHtml`
+  makeIdList(data, index, boolean) {
+    const makeIdListTemplete = insertData => this.templeteHtml`
+        ${insertData.map(v => this.templeteHtml`
           <li>
           <a href="#"><i class="far fa-folder"></i><i class="far fa-folder-open"></i>
             <div>
@@ -110,10 +109,10 @@ class List {
                 <tbody>
                 <tr>
                   <th>ID :</th>
-                  <td>$${v.blockId}</td>
+                  <td>$${v.Id}</td>
                 </tr>
                 <tr>
-                  <th>Tx amount :</th>
+                  <th>count :</th>
                   <td>$${v.tx_count}</td>
                 </tr>
                 </tbody>
@@ -133,18 +132,18 @@ class List {
         this.hideBtnMore();
         this.nSliceIndex = 0;
       }
-      this.blockContainer.insertAdjacentHTML('beforeend', tmpl(insertData));
+      this.blockContainer.insertAdjacentHTML('beforeend', makeIdListTemplete(insertData));
       const el = document.querySelectorAll('#blockList li');
       this.setActive(el);
     } else {
       //empty data
-      this.blockContainer.insertAdjacentHTML('beforeend', this.emptyList());
+      this.blockContainer.insertAdjacentHTML('beforeend', List.emptyList());
     }
   }
 
-  blockInfo(data, blockIndex) {
-    const tmpl = insertData => this.tmplHtml`
-        ${insertData[blockIndex].detail.map(v => this.tmplHtml`
+  showIdInfo(data, blockIndex) {
+    const makeInfoTemplete = insertData => this.templeteHtml`
+        ${insertData[blockIndex].detail.map(v => this.templeteHtml`
           <li>
           <table class="table table-bordered table-striped">
             <colgroup>
@@ -164,8 +163,8 @@ class List {
               <td>${v.datetime}</td>
             </tr>
             <tr>
-              <th>TxID</th>
-              <td>${v.tx_id}</td>
+              <th>Transfer</th>
+              <td>${v.transfer}</td>
             </tr>
             </tbody>
           </table>
@@ -173,10 +172,10 @@ class List {
 
     this.txContainer.innerHTML = '';
     if (data.length > 0) {
-      this.txContainer.insertAdjacentHTML('beforeend', tmpl(data));
+      this.txContainer.insertAdjacentHTML('beforeend', makeInfoTemplete(data));
     } else {
       // empty data
-      this.txContainer.insertAdjacentHTML('beforeend', this.emptyList());
+      this.txContainer.insertAdjacentHTML('beforeend', List.emptyList());
     }
   }
 
@@ -208,11 +207,11 @@ class List {
             this.bFirst = true;
             this.channelIndex = index;
             this.nSliceIndex = 0;
-            this.blockList(this.originData, index);
-            this.blockInfo(this.originData[index].blks, 0);
+            this.makeIdList(this.originData, index);
+            this.showIdInfo(this.originData[index].blks, 0);
             break;
           case 'box_block_list':
-            this.blockInfo(this.originData[this.channelIndex].blks, index);
+            this.showIdInfo(this.originData[this.channelIndex].blks, index);
             break;
           default:
             break;
@@ -227,10 +226,10 @@ class List {
 
   addList() {
     const bAdd = true;
-    this.blockList(this.originData, this.channelIndex, bAdd);
+    this.makeIdList(this.originData, this.channelIndex, bAdd);
   }
 
-  tmplHtml(templateObject, ...substs) {
+  templeteHtml(templateObject, ...substs) {
     const raw = templateObject.raw;
     let result = '';
     substs.forEach((subst, i) => {
@@ -259,7 +258,7 @@ class List {
       .replace(/`/g, '&#96;');
   }
 
-  emptyList(){
+  static emptyList(){
     return `<li class="txt_no_data">
               <p>No data available</p>
               <span class="fas fa-database"></span>
