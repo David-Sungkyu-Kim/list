@@ -1,6 +1,6 @@
-# BlockList refactory
+# Simple list interface
 
-> Vanilla js
+> Simple list interface dev by vanilla js
 
 ## Build Setup
 
