@@ -2,10 +2,9 @@
 
 > Simple list interface dev by vanilla js
 
-[Demo](http://sungkyu.me/gbc/list/views_html/blockchain_list.html)
+[Show Demo](http://sungkyu.me/gbc/list/views_html/blockchain_list.html)
 
-# Simple list interface
-Preview
+## Preview
 ![list]()
 
 ## Build Setup
