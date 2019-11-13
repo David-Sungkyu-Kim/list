@@ -1,7 +1,8 @@
 # Simple list interface
 
 > Simple list interface dev by vanilla js
-> [Demo](http://sungkyu.me/gbc/list/views_html/blockchain_list.html)
+
+[Demo](http://sungkyu.me/gbc/list/views_html/blockchain_list.html)
 
 # Simple list interface
 Preview
