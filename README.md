@@ -5,7 +5,7 @@
 [Show Demo](http://sungkyu.me/gbc/list/views_html/blockchain_list.html)
 
 ## Preview
-![project20](./resources/img/project20.png)
+![project20](./resources/img/project20.jpg)
 
 ## Build Setup
 
